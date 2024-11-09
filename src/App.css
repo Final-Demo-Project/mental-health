@@ -1,6 +1,21 @@
-#hero-section{
-    /* background-image: url('./assets/Woman.jpg');
-    width : 100vw;
-    height: 100vh;
-    background-repeat: no-repeat; */
-}   
+
+.mood-tracker {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
+    /* margin-left: 400px; */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  button {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  
+  .chart-container {
+    margin-top: 20px;
+  }
+  
+ 

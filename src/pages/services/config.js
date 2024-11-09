@@ -11,4 +11,4 @@ export const apiClient = axios.create({
     baseURL:baseUrl,
 });
 
-console.log('ba', baseUrl)
+// console.log('ba', baseUrl)
