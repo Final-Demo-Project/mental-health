@@ -6,6 +6,7 @@ import image3 from "../../assets/Mental.jpg"
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SearchBar from './SearchBar'
+import AllEduContent from './AllEduContent'
 
 const images = [
     `url(${image1})`,
@@ -50,7 +51,7 @@ const Hero = () => {
                <SearchBar/>
             </div>
             <h1 className='text-3xl font-bold mb-4'>Educational Contents</h1>
-            //AllEduContent
+            <AllEduContent/>
 
         </div>
     </div>

@@ -24,7 +24,7 @@ const Footer = () => {
         
       </div>
       <div>
-        <h1 className='mb-3'>Account</h1>
+        <h1 className='mb-3'>Navigation</h1>
         <p>Start self assessment</p>
         <p>Mood</p>
         <p>Counseling</p>

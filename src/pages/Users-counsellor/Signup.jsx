@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {ToastContainer, toast } from 'react-toastify'
+import axios from 'axios'
 import { apiSignup } from '../services/auth'
 import 'react-toastify/dist/ReactToastify.css'
 
-// const getRoles = async () => {
-//   try {
-//     const response = await axios.get(`https://advertisement-api.onrender.com/categories`);
-//     getRoles(response.data); // Set roles from API response
-//   } catch (error) {
-//     console.error('Error fetching categories:', error);
-//     toast.error("Failed to load categories");
-//   }
-// };
-
-// // Fetch roles when the component mounts
-// useEffect(() => {
-//   getRoles();
-// }, []);
-
 const Signup = () => {
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false); // Optional: Handle loading state
+  const navigate = useNavigate();
+
+
+
   const handleSubmit = async (event) =>{
     event.preventDefault() //prevent the page from reloading
     try{
@@ -33,9 +22,9 @@ const Signup = () => {
       const password = formData.get ("password")
       const confirmPassword = formData.get("confirmPassword")
       const phone = formData.get("phone")
-      const userType = formData.get("role")
+      const role = formData.get("role")
 
-      console.log(fullName, email, password ,phone)
+      console.log(fullName, email, password ,phone, role)
 
        //Check if passwords match
        if (password !== confirmPassword) {
@@ -44,12 +33,17 @@ const Signup = () => {
        }
        // if (name && email && password && userType)
 
-       const payload = {fullName: fullName, email: email, password: password, role:"counselor" }
+       const payload = {fullName, email, password, phone, role }
 
        const response = await apiSignup(payload)
        console.log(response.data)
-       toast.success("Sign Up Successfull")
+       if (response.status === 200){
+       toast.success("Sign Up Successfull");
        navigate("/login")
+       } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+       
 
    } catch (error) {
     toast.error("Sign Up failed. please try again.")
@@ -88,7 +82,7 @@ const Signup = () => {
           <label className="text-lg font-semibold mb-2">Contact </label>
           <input
             name="phone"
-            type="email"
+            type="string"
             placeholder="Enter your Phone Number"
             required
             className=" p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 " />
@@ -97,17 +91,12 @@ const Signup = () => {
         
         <div className="flex flex-col">
           <label className="text-lg font-semibold mb-2">Role</label>
-          <select name="category" required className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2">
+          <select name="role" required className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2">
             <option value="">Select a Role</option>
-            {/* {Array.isArray(role) && categories.length > 0 ? (
-              roles.map((role) => (
-                <option key={role.id} value={role.id}>
-                
-                </option>
-              ))
-            ) : (
-              <option disabled>Loading roles...</option>
-            )} */}
+    
+            <option value="user">User</option>
+            <option value= "counselor">Counselor</option>
+            <option value= "admin">Admin</option>
           </select>
         </div>
 

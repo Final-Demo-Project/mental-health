@@ -1,11 +1,14 @@
+import axios from 'axios';
 import React, { useState } from 'react'
-import { ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 
 const PostingForm = () => {
 const [loading, setLoading] = useState(false);// Optional: Handle loading state
-
+const navigate = useNavigate();
 
 
 
@@ -14,24 +17,24 @@ const saveContent = async (event) => {
     const formData = new FormData(event.target); // Get form data
     setLoading(true); // Optional: Start loading
 
-    // try {
-    //     const response = await axios.post(`https://advertisement-api.onrender.com/adverts`, formData);
-    //     console.log('Advert posted:', response.data);
+    try {
+        const response = await axios.post(`https://mental-health-api-ur3r.onrender.com/educationals`, formData);
+        console.log('Content posted:', response.data);
         
-    //     // Show success notification after posting advert
-    //     toast.success("Advert posted successfully");
+        // Show success notification after posting advert
+        toast.success("Content posted successfully");
         
-    //     // Wait for 3 seconds before navigating
-    //     setTimeout(() => {
-    //         navigate('/dashboard'); // Navigate to dashboard
-    //     }, 2000);
+        // Wait for 3 seconds before navigating
+        setTimeout(() => {
+            navigate('/admindashboard/content-management'); // Navigate to dashboard
+        }, 2000);
         
-    // } catch (error) {
-    //     console.error('Error posting advert:', error);
-    //     toast.error("Failed to post advert."); // Show error notification if there's a problem
-    // } finally {
-    //     setLoading(false); // Stop loading after request completes
-    // }
+    } catch (error) {
+        console.error('Error posting advert:', error.response ? error.response.data : error.message);
+        toast.error("Failed to post advert."); // Show error notification if there's a problem
+    } finally {
+        setLoading(false); // Stop loading after request completes
+    }
 };
 
 
@@ -60,7 +63,40 @@ const saveContent = async (event) => {
               <input
                
                 type="file"
-                name="image"
+                name="cover"
+                required
+                className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-lg font-semibold mb-2">Author</label>
+              <input
+           
+                name="author"
+                type="text"
+                placeholder="Enter article title"
+                required
+                className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-lg font-semibold mb-2">Date</label>
+              <input
+           
+                name="date"
+                type="text"
+                placeholder="Enter article title"
+                required
+                className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-lg font-semibold mb-2">Category</label>
+              <input
+           
+                name="category"
+                type="text"
+                placeholder="Enter article title"
                 required
                 className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
               />
@@ -70,7 +106,8 @@ const saveContent = async (event) => {
             <div className="flex flex-col">
               <label className="text-lg font-semibold mb-2">Description</label>
               <textarea
-                name="description"
+                name="content"
+                type="text"
                 placeholder="Enter the Description"
                 rows="3"
                 required
@@ -90,8 +127,8 @@ const saveContent = async (event) => {
      
           </form>
         
-        <ToastContainer
-        />
+        {/* <ToastContainer/> */}
+        
         </div>
       );
 

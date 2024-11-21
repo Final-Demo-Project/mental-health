@@ -8,9 +8,8 @@ import { MdMood } from "react-icons/md";
 import { HiOutlineHeart } from "react-icons/hi";
 import { FaHandsHelping } from "react-icons/fa";
 import { FaRegThumbsUp } from "react-icons/fa";
-import { ImProfile } from "react-icons/im";
 
-const Sidebar = () => {
+const AdminSidebar = () => {
 //   const [profile, setProfile] = useState(null);
 
 //   useEffect(() => {
@@ -25,8 +24,9 @@ const Sidebar = () => {
 //     };
 //     fetchProfile();
 //   }, []);
+
   return (
-    <div className='w-64 h-screen bg-blue-500 text-white p-6 flex flex-col fixed'>
+    <div className='w-64 h-screen bg-blue-500 text-white p-6 flex flex-col fixed '>
     <div className='flex items-center mb-10'>
         <div className='w-8 h-8 bg-white rounded-full flex item-center justify-center mr-2'>
             <span className='text-black font-bold flex items-center'>M</span>
@@ -45,13 +45,16 @@ const Sidebar = () => {
               <p>Loading profile</p>
             )}
           </li> */}
-            <li> <Link to = "/userdashboard" className='flex items-center mt-6'><MdDashboard className='mr-3 h-5 w-5' />  Dashboard</Link></li>
-            <li><Link to = "/userdashboard/profile" className='flex items-center mt-6'><ImProfile  className='mr-3 h-5 w-5' /> Profile </Link></li>
-            <li> <Link to = "/userdashboard/selfassessment" className='flex items-center mt-6'><MdAssessment className='mr-3 h-5 w-5'/>Start self assessment </Link></li>
-            <li> <Link to = "/userdashboard/mood" className='flex items-center mt-6'><MdMood  className='mr-3 h-5 w-5'/>Mood Tracker</Link></li>
-            <li> <Link to = "/userdashboard/counseling" className='flex items-center mt-6'><HiOutlineHeart className='mr-3 h-5 w-5' />Counseling </Link></li>
-            <li> <Link to = "/userdashboard/helpline" className='flex items-center mt-6'><FaHandsHelping className='mr-3 h-5 w-5'/>HelpLine</Link></li>
-            <li> <Link to = "/userdashboard/communitysupport" className='flex items-center mt-6'><FaRegThumbsUp className='mr-3 h-5 w-5'/>Community Support</Link></li>
+            <li> <Link to = "/admindashboard" className='flex items-center mt-6'><MdDashboard className='mr-3 h-5 w-5' />User Management </Link></li>
+            <li> <Link to = "/admindashboard/postingform" className='flex items-center mt-6'><MdDashboard className='mr-3 h-5 w-5' />Post a Content </Link></li>
+            <li> <Link to = "/admindashboard/counselor-management" className='flex items-center mt-6'><MdAssessment className='mr-3 h-5 w-5'/>Counselor Management </Link></li>
+            <li> <Link to = "/admindashboard/appointments" className='flex items-center mt-6'><MdMood  className='mr-3 h-5 w-5'/>Appointments</Link></li>
+            <li> <Link to = "/admindashboard/content-management" className='flex items-center mt-6'><HiOutlineHeart className='mr-3 h-5 w-5' />Content Management </Link></li>
+            <li> <Link to = "/admindashboard/community-support" className='flex items-center mt-6'><FaHandsHelping className='mr-3 h-5 w-5'/>Community Support</Link></li>
+            <li> <Link to = "/admindashboard/mood-tracking-insights" className='flex items-center mt-6'><FaRegThumbsUp className='mr-3 h-5 w-5'/>Mood Tracking Insights</Link></li>
+            <li> <Link to = "/admindashboard/helpline-resources" className='flex items-center mt-6'><FaRegThumbsUp className='mr-3 h-5 w-5'/>Helpline Resources</Link></li>
+            <li> <Link to = "/admindashboard/analytics-reports" className='flex items-center mt-6'><FaRegThumbsUp className='mr-3 h-5 w-5'/>Analytics & Reporting</Link></li>
+            <li> <Link to = "/admindashboard/feedback-surveys" className='flex items-center mt-6'><FaRegThumbsUp className='mr-3 h-5 w-5'/>Feedback & Surveys</Link></li>
         </ul>
     </nav>
     <div className="mt-auto pt-6">
@@ -67,4 +70,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default AdminSidebar

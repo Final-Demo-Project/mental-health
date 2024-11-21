@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'; 
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,55 +29,73 @@ const MoodTracker = () => {
   const [moodHistory, setMoodHistory] = useState([]);
   const chartRef = useRef(null);
 
-  // Load mood history from localStorage
+  // Load mood history from API
   useEffect(() => {
-    const savedMoods = JSON.parse(localStorage.getItem('moodHistory')) || [];
-    setMoodHistory(savedMoods);
-
-    // Cleanup function
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
+    const fetchMoodHistory = async () => {
+      try {
+        const response = await fetch('https://mental-health-api-ur3r.onrender.com/moods');
+        const data = await response.json();
+        setMoodHistory(data);
+      } catch (error) {
+        console.error('Error fetching mood history:', error);
       }
     };
+
+    fetchMoodHistory();
   }, []);
 
-  const handleMoodSelect = (selectedMood) => {
-    const today = new Date().toLocaleDateString();
+  const handleMoodSelect = async (selectedMoodIndex) => {
+    const moodDescriptions = ["Sad", "Anxious", "Neutral", "Relieved", "Happy"]; // Map mood index to descriptions
+    const selectedMood = moodDescriptions[selectedMoodIndex - 1];
+    const today = new Date().toLocaleDateString('en-US');
     const newEntry = { date: today, mood: selectedMood };
 
-    const updatedMoodHistory = [
-      ...moodHistory.filter(entry => entry.date !== today),
-      newEntry
-    ];
+    console.log('Sending data:', JSON.stringify(newEntry));
 
-    setMoodHistory(updatedMoodHistory);
-    setMood(selectedMood);
-    localStorage.setItem('moodHistory', JSON.stringify(updatedMoodHistory));
+    try {
+      // Save new mood entry to the API
+      const response = await fetch('https://mental-health-api-ur3r.onrender.com/moods', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newEntry),
+      });
+      if (response.ok) {
+        setMood(selectedMood);
+        setMoodHistory([...moodHistory.filter(entry => entry.date !== today), newEntry]);
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to save mood entry:', errorData);
+      }
+    } catch (error) {
+      console.error('Error saving mood entry:', error);
+    }
   };
 
-  
-    // Function to analyze mood data for interpretation
-   const getMoodInterpretation = () => {
+  const getMoodInterpretation = () => {
     if (moodHistory.length === 0) return 'No data available. Start tracking your mood';
 
-    const averageMood = moodHistory.reduce((sum, entry) => sum + entry.mood, 0) / moodHistory.length;
-    const lowMoodStreak = moodHistory.reduce((streak, entry) => entry.mood <= 2 ? streak + 1 : 0, 0);
+    const moodDescriptions = ["Sad", "Anxious", "Neutral", "Relieved", "Happy"];
+    const moodNumericValues = moodHistory.map(entry => moodDescriptions.indexOf(entry.mood) + 1);
 
+    const averageMood = moodNumericValues.reduce((sum, moodValue) => sum + moodValue, 0) / moodNumericValues.length;
+    const lowMoodStreak = moodNumericValues.reduce((streak, moodValue) => moodValue <= 2 ? streak + 1 : 0, 0);
     if (averageMood <= 2) {
-      return 'Your average mood is low. This might indicate a period of prolonged negative emotions. Consider taking time for self-care or talking to a mental health professional if this persists.';
-} else if (lowMoodStreak >= 5) {
-  return 'You have had several consecutive days of low moods. Extented period of low mood can sometimes signal emotional distress. Reaching out for support could be beneficial.';
-  } else {
-  return 'Your mood seems generally balanced. Keep tracking to notice any patterns over time.';
-};
-   }
+      return 'Your average mood is low. Consider taking time for self-care or talking to a mental health professional if this persists.';
+    } else if (lowMoodStreak >= 5) {
+      return 'You have had several consecutive days of low moods. Reaching out for support could be beneficial.';
+    } else {
+      return 'Your mood seems generally balanced. Keep tracking to notice any patterns over time.';
+    }
+  };
+
   const chartData = {
     labels: moodHistory.map(entry => entry.date),
     datasets: [
       {
         label: 'Mood Score Over Time',
-        data: moodHistory.map(entry => entry.mood),
+        data: moodHistory.map(entry => ["Sad", "Anxious", "Neutral", "Relieved", "Happy"].indexOf(entry.mood) + 1),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 2,
@@ -109,7 +127,8 @@ const MoodTracker = () => {
       tooltip: {
         callbacks: {
           label: (context) => {
-            const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
+             const moodEmojis = ["😞 Sad", "😕 Anxious", "😐 Neutral", "😊 Relieved", "😄 Happy"];
+            // const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
             return `Mood: ${moodEmojis[context.raw - 1]} (${context.raw})`;
           }
         }
@@ -122,7 +141,9 @@ const MoodTracker = () => {
         ticks: {
           stepSize: 1,
           callback: (value) => {
-            const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
+            const moodEmojis = ["😞 Sad", "😕 Anxious", "😐 Neutral", "😊 Relieved", "😄 Happy"];
+
+            // const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
             return value > 0 && value <= 5 ? moodEmojis[value - 1] : '';
           }
         }
@@ -135,10 +156,12 @@ const MoodTracker = () => {
     }
   };
 
-  const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
+  const moodEmojis = ["😞 Sad", "😕 Anxious", "😐 Neutral", "😊 Relieved", "😄 Happy"];
+
+  // const moodEmojis = ["😞", "😕", "😐", "😊", "😄"];
 
   return (
-    <div  className=" flex flex-col w-full mood-tracker mx-auto p-6 bg-white rounded-lg shadow-lg h-[100vh] ">
+    <div className="flex flex-col w-80%  mx-auto p-6 bg-white rounded-lg shadow-lg h-auto">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
         Daily Mood Tracker
       </h2>
@@ -149,8 +172,8 @@ const MoodTracker = () => {
             key={index}
             onClick={() => handleMoodSelect(index + 1)}
             className={`text-3xl p-3 rounded-full transition-transform hover:scale-110 
-              ${mood === index + 1 ? 'bg-blue-100 transform scale-110' : 'bg-gray-50'}`}
-            aria-label={`Select mood ${index + 1}`}
+              ${mood === emoji ? 'bg-blue-100 transform scale-110' : 'bg-gray-50'}`}
+            aria-label={`Select mood ${emoji}`}
           >
             {emoji}
           </button>
@@ -163,7 +186,7 @@ const MoodTracker = () => {
           : 'Select your mood for today'}
       </p>
 
-      <div className="h-96 mb-4 bg-gray-50 rounded-md shadow-inner">
+      <div className="h-96 mb-4 bg-gray-50 rounded-md shadow-inner p-4">
         {moodHistory.length > 0 ? (
           <Line
             ref={chartRef}
@@ -178,7 +201,7 @@ const MoodTracker = () => {
       </div>
 
       {moodHistory.length > 0 && (
-        <div className="mt-4 text-xl text-gray-600 text-center ">
+        <div className="mt-4 text-xl text-gray-600 text-center">
           {`You've logged your mood ${moodHistory.length} time${moodHistory.length === 1 ? '' : 's'}`}
         </div>
       )}

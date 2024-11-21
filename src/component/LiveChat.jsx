@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import io from 'socket.io-client';
-const socket = io('http://localhost:5000');
+// import io from 'socket.io-client';
+// const socket = io('http://localhost:5000');
 
 const Livechat = () => {
 
@@ -8,21 +8,21 @@ const Livechat = () => {
   const [message, setMessage] = useState('');
   const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    // Receive chat messages from server
-    socket.on('chatMessage', (messageData) => {
-      setMessages((prevMessages) => [...prevMessages, messageData]);
-    });
+  // useEffect(() => {
+  //   // Receive chat messages from server
+  //   socket.on('chatMessage', (messageData) => {
+  //     setMessages((prevMessages) => [...prevMessages, messageData]);
+  //   });
 
-    return () => {
-      socket.off('chatMessage');
-    };
-  }, []);
+  //   return () => {
+  //     socket.off('chatMessage');
+  //   };
+  // }, []);
 
   const sendMessage = () => {
     if (message && username) {
-      const messageData = { username, text: message, timestamp: new Date() };
-      socket.emit('chatMessage', messageData); // Send message to server
+      const messageData = { sender, text: message, timestamp: new Date() };
+      // socket.emit('chatMessage', messageData); // Send message to server
       setMessage(''); // Clear input field
     }
   };
@@ -48,7 +48,7 @@ const Livechat = () => {
       {/* Input for Message */}
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Sender"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         className="p-2 mr-2 border rounded"

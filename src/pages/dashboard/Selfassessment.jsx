@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import  {RadioGroup}  from '@radix-ui/themes';
+import axios from 'axios';
 
 const Selfassessment = () => {
     const [responses, setResponses] = useState({
@@ -15,8 +16,11 @@ const Selfassessment = () => {
         suicidalThoughts: null
     });
 
-    const [totalScore, setTotalScore] = useState(null);
+    const [score, setScore] = useState(null);
     const [severity, setSeverity] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [submissionMessage, setSubmissionMessage] = useState('');
+    const [type, setType] = useState('');
 
     const questions = [
         { id: 'anhedonia', text: 'Little interest or pleasure in doing things', category: 'Mood and Enjoyment' },
@@ -44,15 +48,42 @@ const Selfassessment = () => {
         }));
     };
 
-    const calculateScore = () => {
-        const score = Object.values(responses).reduce((sum, response) => (response !== null ? sum + response : sum), 0);
-        setTotalScore(score);
+    const calculateScore = async () => {
+        setIsLoading(true);
+        setSubmissionMessage('');
 
-        if (score <= 4) setSeverity('Minimal Depression');
-        else if (score <= 9) setSeverity('Mild Depression');
-        else if (score <= 14) setSeverity('Moderate Depression');
-        else if (score <= 19) setSeverity('Moderately Severe Depression');
-        else setSeverity('Severe Depression');
+        const score = Object.values(responses).reduce((sum, response) => (response !== null ? sum + response : sum), 0);
+        setScore(score);
+
+        let calculatedSeverity = '';
+        if (score <= 4) calculatedSeverity = 'Minimal Depression';
+        else if (score <= 9) calculatedSeverity = 'Mild Depression';
+        else if (score <= 14) calculatedSeverity = 'Moderate Depression';
+        else if (score <= 19) calculatedSeverity = 'Moderately Severe Depression';
+        else calculatedSeverity = 'Severe Depression';
+
+        setSeverity(calculatedSeverity);
+
+        const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+        const assessmentType = "Assessment";
+       setType(assessmentType);
+        const assessmentData = {
+            responses,
+            score: score,
+            severity: calculatedSeverity,
+            date: currentDate,
+            type: assessmentType,
+        };
+        try {
+            const response = await axios.post('https://mental-health-api-ur3r.onrender.com/assessments', assessmentData);
+            
+            setSubmissionMessage('Assessment submitted successfully!');
+        } catch (error) {
+            console.error('Failed to submit assessment:', error);
+            setSubmissionMessage('Error submitting assessment. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const isFormComplete = () => {
@@ -98,13 +129,13 @@ const Selfassessment = () => {
                 disabled={!isFormComplete()}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded disabled:opacity-50"
             >
-                Calculate Depression Score
-            </button>
+                {isLoading ? 'Submitting...' : 'Calculate Depression Score'}
+                </button>
 
-            {totalScore !== null && (
+            {score !== null && (
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg text-center">
                     <h3 className="text-lg font-bold text-blue-800">Screening Results</h3>
-                    <p className="text-md font-semibold mt-2">Total Score: {totalScore}</p>
+                    <p className="text-md font-semibold mt-2">Total Score: {score}</p>
                     <p
                         className={`font-bold mt-2 ${severity === 'Minimal Depression'
                                 ? 'text-green-600'
@@ -117,12 +148,18 @@ const Selfassessment = () => {
                                             : 'text-red-800'
                             }`}
                     >
-                        Severity: {severity}
+                        severity: {severity}
                     </p>
+                    {type && <p> Type: {type} </p>}
                     <p className="text-sm text-gray-700 mt-2">
                         Note: This is a screening tool. Please consult a mental health professional for a comprehensive
                         evaluation.
                     </p>
+                </div>
+            )}
+            {submissionMessage && (
+                <div className="mt-4 p-4 text-center text-white bg-blue-600 rounded">
+                    {submissionMessage}
                 </div>
             )}
         </div>

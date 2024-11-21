@@ -2,10 +2,11 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer,toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { apiLogin } from '../services/auth'
 
 
 const Login = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) =>{
         event.preventDefault()
@@ -13,22 +14,39 @@ const Login = () => {
     const formData = new FormData(event.target);
     const email = formData.get("email");
     const password = formData.get("password")
-    const response = await apiLogin({email,password});
     // console.log(response.data);
+    
+    try {
+      
+      const response = await apiLogin({email,password});
+
+      console.log("API Response:", response.data); // Log the response structure
+
     if (response.status===200){
-        localStorage.setItem("token",response.data.accessToken)
-    }
+      const { accessToken, role } = response.data;
+      console.log("Role:", role); // Debug role value
 
-    if(response.status===200) {
-        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("token", accessToken)
+
         toast.success("Login Successful");
-        navigate('/dashboard')
+
+        if(role === "counselor") {
+          navigate('/admindashboard');
+        } else if (role === 'user') {
+          navigate('/userdashboard')
+        } else {
+          toast.error("Invalid user role");
+        }
     } else {
-        toast.error("Invalid email or password");
+      toast.error("Invalid email or password");
     }
+  } catch (error) {
+    console.error("Login error:", error);
+    toast.error("Something went wrong. Please try again.");
+  }
+};
 
-
-    };
+   
     return (
 
         <div className='flex flex-col justify-center items-center mt-[100px]   '>
@@ -84,7 +102,7 @@ const Login = () => {
     
     
           {/* Toast container to show messages */}
-          <ToastContainer/>
+          {/* <ToastContainer/> */}
     
     
         </div>

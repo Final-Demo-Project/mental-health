@@ -1,10 +1,10 @@
 import React from 'react'
 import AllEduContent from '../Landing page/AllEduContent'
 
-const Dashboard = () => {
+const ContentManagement = () => {
   return (
     <div><AllEduContent/></div>
   )
 }
 
-export default Dashboard
+export default ContentManagement
