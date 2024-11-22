@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ToastContainer,toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 import { apiLogin } from '../services/auth'
 
 
@@ -102,7 +101,6 @@ const Login = () => {
     
     
           {/* Toast container to show messages */}
-          {/* <ToastContainer/> */}
     
     
         </div>

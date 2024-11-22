@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { apiSignup } from '../services/auth';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const [loading, setLoading] = useState(false); // Handle loading state
@@ -131,7 +130,6 @@ const Signup = () => {
           </p>
         </div>
       </form>
-      <ToastContainer />
     </div>
   );
 };
