@@ -45,7 +45,7 @@ const Sidebar = () => {
               <p>Loading profile</p>
             )}
           </li> */}
-            <li> <Link to = "/userdashboard" className='flex items-center mt-6'><MdDashboard className='mr-3 h-5 w-5' />  Dashboard</Link></li>
+            <li> <Link to = "/userdashboard" className='flex items-center mt-6'><MdDashboard className='mr-3 h-5 w-5' />  Educational Resources</Link></li>
             <li><Link to = "/userdashboard/profile" className='flex items-center mt-6'><ImProfile  className='mr-3 h-5 w-5' /> Profile </Link></li>
             <li> <Link to = "/userdashboard/selfassessment" className='flex items-center mt-6'><MdAssessment className='mr-3 h-5 w-5'/>Start self assessment </Link></li>
             <li> <Link to = "/userdashboard/mood" className='flex items-center mt-6'><MdMood  className='mr-3 h-5 w-5'/>Mood Tracker</Link></li>
