@@ -31,7 +31,7 @@ const AdminSidebar = () => {
         <div className='w-8 h-8 bg-white rounded-full flex item-center justify-center mr-2'>
             <span className='text-black font-bold flex items-center'>M</span>
         </div>
-        <span className='text-xl font-bold'>Mental Health</span>
+        <span className='text-xl font-bold'>MindCare</span>
     </div>
     <nav>
         <ul>

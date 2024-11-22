@@ -89,15 +89,20 @@ const PostingForm = () => {
 
         {/* Category Field */}
         <div className="flex flex-col">
-          <label className="text-lg font-semibold mb-2">Category</label>
-          <input
-            name="category"
-            type="text"
-            placeholder="Enter article category"
-            required
-            className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
-          />
-        </div>
+  <label className="text-lg font-semibold mb-2">Category</label>
+  <select
+    name="category"
+    required
+    className="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2"
+  >
+    <option value="">Select a Category</option> {/* Default placeholder */}
+    <option value="Anxiety Management">Anxiety Management</option>
+    <option value="Stress Management">Stress Management</option>
+    <option value="Depression Management">Depression Management</option>
+    <option value="Mood Disorder">Mood Disorder</option>
+    <option value="Trauma Recovery">Trauma Recovery</option>
+  </select>
+</div>
 
         {/* Description Field */}
         <div className="flex flex-col">
